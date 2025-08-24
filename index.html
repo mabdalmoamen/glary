@@ -4,63 +4,495 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>My Links</title>
+    <title>Glary Links — Quick Access</title>
+    <meta name="description" content="All important links in one beautiful mobile-first page.">
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --bg: #0f1724;
+            /* page background (dark) */
+            --card: #0b1220;
+            /* header card */
+            --muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.04);
+            --accent-1: #7c3aed;
+            /* purple */
+            --accent-2: #06b6d4;
+            /* teal */
+            --accent-3: #f97316;
+            /* orange */
+            --radius: 14px;
+            --max-width: 900px;
+        }
+
+        /* Reset & base */
+        * {
+            box-sizing: border-box
+        }
+
+        html,
         body {
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
-            background: #f6f8fb;
-            padding: 18px
+            height: 100%
         }
 
-        .card {
-            max-width: 720px;
-            margin: 20px auto;
-            background: #fff;
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(180deg, rgba(13, 18, 24, 1) 0%, rgba(5, 7, 10, 1) 100%);
+            color: #e6eef8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        /* header / identity card */
+        .hero {
+            display: flex;
+            gap: 18px;
+            align-items: center;
             padding: 18px;
-            border-radius: 10px;
-            box-shadow: 0 8px 24px rgba(15, 20, 30, .06)
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(6, 182, 212, 0.06));
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+            margin-bottom: 18px;
+            backdrop-filter: blur(6px);
         }
 
-        h1 {
-            margin: 0 0 12px;
-            font-size: 20px
+        .avatar {
+            flex: 0 0 86px;
+            height: 86px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(12, 17, 25, 0.6), inset 0 -8px 20px rgba(255, 255, 255, 0.06);
         }
 
-        ul {
-            padding-left: 18px
+        .hero-info {
+            flex: 1;
+            min-width: 0;
         }
 
-        li {
-            margin: 10px 0;
-            font-size: 16px
+        .title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            letter-spacing: 0.2px;
         }
 
-        a {
-            color: #0066cc;
-            text-decoration: none;
-            word-break: break-word
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
         }
 
-        footer {
+        .badges {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
             font-size: 12px;
-            color: #6b7280;
-            margin-top: 12px
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+            color: #dbeafe;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* links grid */
+        .links {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width:640px) {
+            .hero {
+                flex-direction: row;
+                gap: 12px
+            }
+
+            .links {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .link-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: transform .22s cubic-bezier(.2, .9, .3, 1), box-shadow .22s;
+            cursor: pointer;
+        }
+
+        .link-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(2, 6, 23, 0.55);
+        }
+
+        .link-thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            flex: 0 0 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 6px 16px rgba(2, 6, 23, 0.6);
+        }
+
+        .link-meta {
+            flex: 1;
+            min-width: 0
+        }
+
+        .link-title {
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            font-size: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .link-url {
+            font-size: 13px;
+            color: var(--muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .link-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            border: 0;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .btn:active {
+            transform: translateY(1px)
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: white;
+            box-shadow: 0 8px 18px rgba(6, 11, 26, 0.6);
+            border: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--muted);
+        }
+
+        /* small footer area */
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* subtle icon */
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* colored thumbnails (several variants) */
+        .t-purple {
+            background: linear-gradient(135deg, #7c3aed, #c084fc);
+        }
+
+        .t-teal {
+            background: linear-gradient(135deg, #06b6d4, #67e8f9);
+            color: #072a2a;
+        }
+
+        .t-orange {
+            background: linear-gradient(135deg, #fb923c, #f97316);
+        }
+
+        .t-blue {
+            background: linear-gradient(135deg, #0ea5e9, #60a5fa);
+        }
+
+        /* tiny animation for copy tooltip */
+        .copied {
+            display: inline-block;
+            font-size: 12px;
+            color: #a7f3d0;
+            margin-left: 8px;
+            transform-origin: center;
+            animation: pop .9s ease forwards;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: translateY(6px) scale(.95);
+                opacity: 0
+            }
+
+            40% {
+                transform: translateY(-2px) scale(1.03);
+                opacity: 1
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="card">
-        <h1>My Links</h1>
-        <ul>
-            <li><a href="https://www.facebook.com/share/16zEH5uKuS/" target="_blank" rel="noopener noreferrer">Facebook
-                    share</a></li>
-            <li><a href="https://www.instagram.com/glaryegy/" target="_blank" rel="noopener noreferrer">Instagram</a>
-            </li>
-            <li><a href="https://gmc.glary.sa" target="_blank" rel="noopener noreferrer">GMC site</a></li>
-        </ul>
-        <footer>Scanned from QR — open on your phone</footer>
+    <div class="wrap">
+        <header class="hero" role="banner" aria-label="Identity card">
+            <div class="avatar" aria-hidden="true">G</div>
+
+            <div class="hero-info">
+                <h1 class="title">Glary — Quick Links</h1>
+                <p class="subtitle">All important places — socials, site and more. Tap a card to open, copy, or share.
+                </p>
+
+                <div class="badges" aria-hidden="true">
+                    <div class="badge"> <svg class="icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7v6c0 5 5 9 10 9s10-4 10-9V7l-10-5z" stroke="currentColor"
+                                stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg> Verified</div>
+                    <div class="badge"> <svg class="icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                        </svg> Multi-links</div>
+                </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+                <button id="qrBtn" class="btn btn-ghost" title="Download QR">Download QR</button>
+                <a id="openAll" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer"
+                    style="text-decoration:none">Open Site</a>
+            </div>
+        </header>
+
+        <!-- links grid -->
+        <section class="links" aria-label="Links list">
+            <!-- card 1 -->
+            <article class="link-card" data-url="https://www.facebook.com/share/16zEH5uKuS/">
+                <div class="link-thumb t-purple" aria-hidden="true">f</div>
+                <div class="link-meta">
+                    <div class="link-title">Facebook Share</div>
+                    <div class="link-url">facebook.com/share/16zEH5uKuS</div>
+                </div>
+                <div class="link-actions">
+                    <button class="btn btn-ghost open-btn" title="Open link" aria-label="Open Facebook">Open</button>
+                    <button class="btn copy-btn" title="Copy link" aria-label="Copy Facebook">Copy</button>
+                </div>
+            </article>
+
+            <!-- card 2 -->
+            <article class="link-card" data-url="https://www.instagram.com/glaryegy/">
+                <div class="link-thumb t-teal" aria-hidden="true">@</div>
+                <div class="link-meta">
+                    <div class="link-title">Instagram</div>
+                    <div class="link-url">instagram.com/glaryegy</div>
+                </div>
+                <div class="link-actions">
+                    <button class="btn btn-ghost open-btn" title="Open Instagram">Open</button>
+                    <button class="btn copy-btn">Copy</button>
+                </div>
+            </article>
+
+            <!-- card 3 -->
+            <article class="link-card" data-url="https://gmc.glary.sa">
+                <div class="link-thumb t-orange" aria-hidden="true">G</div>
+                <div class="link-meta">
+                    <div class="link-title">GMC Site</div>
+                    <div class="link-url">gmc.glary.sa</div>
+                </div>
+                <div class="link-actions">
+                    <button class="btn btn-ghost open-btn">Open</button>
+                    <button class="btn copy-btn">Copy</button>
+                </div>
+            </article>
+
+            <!-- extra sample (you can remove or duplicate) -->
+            <article class="link-card" data-url="mailto:contact@glary.sa">
+                <div class="link-thumb t-blue" aria-hidden="true">✉</div>
+                <div class="link-meta">
+                    <div class="link-title">Email</div>
+                    <div class="link-url">contact@glary.sa</div>
+                </div>
+                <div class="link-actions">
+                    <button class="btn btn-ghost open-btn">Open</button>
+                    <button class="btn copy-btn">Copy</button>
+                </div>
+            </article>
+        </section>
+
+
     </div>
+
+    <!-- small inline script: open/copy/qr -->
+    <script>
+        (function () {
+            const links = Array.from(document.querySelectorAll('.link-card'));
+            const openAllButton = document.getElementById('openAll');
+            const qrBtn = document.getElementById('qrBtn');
+            const todayEl = document.getElementById('today');
+
+            // Set date
+            todayEl.textContent = new Date().toLocaleDateString();
+
+            // Helper: get url from card (data-url)
+            function urlOf(card) { return card.getAttribute('data-url'); }
+
+            // Add click handlers
+            links.forEach(card => {
+                const openBtn = card.querySelector('.open-btn');
+                const copyBtn = card.querySelector('.copy-btn');
+                const url = urlOf(card);
+
+                // clicking the whole card opens
+                card.addEventListener('click', (e) => {
+                    // ignore clicks on buttons (they have own handlers)
+                    if (e.target.closest('button')) return;
+                    window.open(url, '_blank', 'noreferrer');
+                });
+
+                openBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    window.open(url, '_blank', 'noreferrer');
+                });
+
+                copyBtn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    try {
+                        await navigator.clipboard.writeText(url);
+                        showCopied(copyBtn);
+                    } catch (err) {
+                        fallbackCopy(url);
+                        showCopied(copyBtn);
+                    }
+                });
+            });
+
+            // set Open Site (first link) target
+            if (links[0]) {
+                openAllButton.href = urlOf(links[0]);
+                // if you want to open the combined hosted page instead, change href here
+            } else {
+                openAllButton.style.display = 'none';
+            }
+
+            function showCopied(el) {
+                const msg = document.createElement('span');
+                msg.className = 'copied';
+                msg.textContent = 'Copied';
+                el.parentNode.appendChild(msg);
+                setTimeout(() => msg.remove(), 1400);
+            }
+
+            function fallbackCopy(text) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); }
+                catch (e) { }
+                ta.remove();
+            }
+
+            // QR generation: use a small library by creating a canvas and drawing
+            // We'll dynamically add QR only when user clicks "Download QR"
+            qrBtn.addEventListener('click', async () => {
+                // URL used for QR — use the page itself (window.location.href)
+                const targetUrl = window.location.href;
+                // create an off-screen canvas and use QRCode library via CDN if available
+                // fallback: open small generator page
+                try {
+                    // try to load QR library quickly
+                    if (typeof QRCode === 'undefined') {
+                        await loadScript('https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js');
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 800;
+                    canvas.height = 800;
+                    await QRCode.toCanvas(canvas, targetUrl, { width: 800, margin: 2 });
+                    // download
+                    const a = document.createElement('a');
+                    a.href = canvas.toDataURL('image/png');
+                    a.download = 'links-qr.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } catch (err) {
+                    // fallback: redirect to simple generator page with the URL as param
+                    const fallback = 'https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=' + encodeURIComponent(targetUrl);
+                    window.open(fallback, '_blank');
+                }
+            });
+
+            function loadScript(src) {
+                return new Promise((res, rej) => {
+                    const s = document.createElement('script');
+                    s.src = src;
+                    s.onload = res;
+                    s.onerror = rej;
+                    document.head.appendChild(s);
+                });
+            }
+
+        })();
+    </script>
 </body>
 
 </html>
