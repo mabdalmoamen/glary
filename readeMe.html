@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Glary Links — Quick Access</title>
+    <meta name="description" content="All important links in one beautiful mobile-first page.">
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0f1724;
+            --card: #0b1220;
+            --muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.04);
+            --accent-1: #7c3aed;
+            --accent-2: #06b6d4;
+            --accent-3: #f97316;
+            --accent-4: #0ea5e9;
+            --radius: 16px;
+            --max-width: 900px;
+        }
+
+        /* Reset & base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(135deg, rgba(13, 18, 24, 1) 0%, rgba(5, 7, 10, 1) 100%);
+            color: #e6eef8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        /* header / identity card */
+        .hero {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            padding: 24px;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(6, 182, 212, 0.08));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 12px 36px rgba(2, 6, 23, 0.7);
+            margin-bottom: 24px;
+            backdrop-filter: blur(8px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .avatar {
+            flex: 0 0 100px;
+            height: 100px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 32px;
+            box-shadow: 0 10px 25px rgba(12, 17, 25, 0.7), inset 0 -8px 20px rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(30deg);
+        }
+
+        .hero-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            letter-spacing: 0.2px;
+            background: linear-gradient(to right, #e6eef8, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.5;
+            max-width: 500px;
+        }
+
+        .badges {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 13px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.03));
+            color: #dbeafe;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        /* links grid */
+        .links {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+        }
+
+        @media (max-width: 640px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 18px;
+            }
+
+            .hero-actions {
+                flex-direction: row;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .links {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .link-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.03), transparent 30%);
+            z-index: -1;
+        }
+
+        .link-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(2, 6, 23, 0.6);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .link-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            flex: 0 0 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 8px 20px rgba(2, 6, 23, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-thumb::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(30deg);
+        }
+
+        .link-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-title {
+            font-weight: 600;
+            margin: 0 0 6px 0;
+            font-size: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-url {
+            font-size: 13px;
+            color: var(--muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            border: 0;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 500;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: white;
+            box-shadow: 0 10px 20px rgba(6, 11, 26, 0.6);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 12px 24px rgba(6, 11, 26, 0.7);
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--muted);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #e6eef8;
+        }
+
+        /* small footer area */
+        .footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--muted);
+            padding: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* subtle icon */
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* colored thumbnails (several variants) */
+        .t-purple {
+            background: linear-gradient(135deg, #7c3aed, #c084fc);
+        }
+
+        .t-teal {
+            background: linear-gradient(135deg, #06b6d4, #67e8f9);
+            color: #072a2a;
+        }
+
+        .t-orange {
+            background: linear-gradient(135deg, #fb923c, #f97316);
+        }
+
+        .t-blue {
+            background: linear-gradient(135deg, #0ea5e9, #60a5fa);
+        }
+
+        /* tiny animation for copy tooltip */
+        .copied {
+            display: inline-block;
+            font-size: 12px;
+            color: #a7f3d0;
+            margin-left: 8px;
+            transform-origin: center;
+            animation: pop 0.9s ease forwards;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: translateY(6px) scale(0.95);
+                opacity: 0;
+            }
+
+            40% {
+                transform: translateY(-2px) scale(1.03);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Pulse animation for QR button */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(124, 58, 237, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header class="hero" role="banner" aria-label="Identity card">
+            <div class="avatar" aria-hidden="true">G</div>
+
+            <div class="hero-info">
+                <h1 class="title">Glary — Quick Links</h1>
+                <p class="subtitle" id="subtitle">All your important places — socials, websites and more in one
+                    beautiful hub. Tap any
+                    card to open, copy, or share. (Page will try to load ./README.md if present)</p>
+
+                <div class="badges" aria-hidden="true">
+                    <div class="badge">
+                        <span class="material-icons" style="font-size:16px">verified</span>
+                        Verified
+                    </div>
+                    <div class="badge">
+                        <span class="material-icons" style="font-size:16px">link</span>
+                        Multi-links
+                    </div>
+                    <div class="badge">
+                        <span class="material-icons" style="font-size:16px">security</span>
+                        Secure
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-actions">
+                <button id="qrBtn" class="btn btn-ghost pulse" title="Download QR code for this page">
+                    <span class="material-icons">qr_code_2</span>
+                    QR Code
+                </button>
+                <a id="openAll" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer"
+                    style="text-decoration:none">
+                    <span class="material-icons">open_in_new</span>
+                    Open Site
+                </a>
+            </div>
+        </header>
+
+        <!-- links grid -->
+        <section class="links" id="links" aria-label="Links list">
+            <!-- cards will be injected here from README or fallback -->
+        </section>
+
+        <div class="footer">
+            <div>Designed for quick mobile access — updated: <strong id="today"></strong></div>
+        </div>
+    </div>
+
+    <!-- small inline script: open/copy/qr + README parsing -->
+    <script>
+        (function () {
+            // Default fallback links (used if README not found or contains no links)
+            let LINKS = [
+                { name: 'Facebook Share', url: 'https://www.facebook.com/share/16zEH5uKuS/', cls: 't-purple' },
+                { name: 'Instagram', url: 'https://www.instagram.com/glaryegy/', cls: 't-teal' },
+                { name: 'GMC Site', url: 'https://gmc.glary.sa', cls: 't-orange' },
+                { name: 'Email', url: 'mailto:contact@glary.sa', cls: 't-blue' }
+            ];
+
+            const linksRoot = document.getElementById('links');
+            const openAllButton = document.getElementById('openAll');
+            const qrBtn = document.getElementById('qrBtn');
+            const subtitleEl = document.getElementById('subtitle');
+            const todayEl = document.getElementById('today');
+            todayEl.textContent = new Date().toLocaleDateString();
+
+            // try README paths (can override with ?readme=PATH)
+            const params = new URLSearchParams(location.search);
+            const readmeParam = params.get('readme');
+            const tryPaths = readmeParam ? [readmeParam] : ['./README.md', './README.MD', '../README.md', '/README.md'];
+
+            // helper: fetch a path and return text or null
+            async function tryFetch(path) {
+                try {
+                    const r = await fetch(path, { cache: "no-store" });
+                    if (!r.ok) throw new Error('not ok ' + r.status);
+                    const txt = await r.text();
+                    if (!txt || txt.trim().length === 0) throw new Error('empty');
+                    return txt;
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            // parse markdown links [label](url) and plain URLs (including mailto:)
+            function parseLinksFromMarkdown(md) {
+                const found = [];
+                // 1) markdown links including http(s) and mailto
+                const mdRe = /\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/g;
+                let m;
+                while ((m = mdRe.exec(md)) !== null) {
+                    found.push({ name: m[1].trim(), url: m[2].trim() });
+                }
+                // 2) plain URLs (http(s) and mailto) - avoid duplicates
+                const urlRe = /(?:https?:\/\/|mailto:)[^\s)]+/g;
+                const existing = new Set(found.map(f => f.url));
+                while ((m = urlRe.exec(md)) !== null) {
+                    const u = m[0].trim();
+                    if (!existing.has(u)) {
+                        // generate friendly name
+                        let name = u;
+                        try {
+                            if (u.startsWith('mailto:')) {
+                                name = u.replace(/^mailto:/i, '');
+                            } else {
+                                name = new URL(u).hostname.replace(/^www\./i, '');
+                            }
+                        } catch (e) { /* ignore */ }
+                        found.push({ name, url: u });
+                        existing.add(u);
+                    }
+                }
+                return found;
+            }
+
+            // render links into the original design cards
+            function renderLinks(list) {
+                linksRoot.innerHTML = '';
+                list.forEach((l, idx) => {
+                    const card = document.createElement('article');
+                    card.className = 'link-card';
+                    card.setAttribute('data-url', l.url);
+
+                    // choose class (preserve any passed cls, else cycle)
+                    const cls = l.cls || (idx % 4 === 0 ? 't-purple' : idx % 4 === 1 ? 't-teal' : idx % 4 === 2 ? 't-orange' : 't-blue');
+
+                    const titleEsc = escapeHtml(l.name || l.url);
+                    const shortUrl = makeShort(l.url);
+
+                    card.innerHTML = `
+                        <div class="link-thumb ${cls}" aria-hidden="true">
+                            <span class="material-icons">${iconFor(l.url)}</span>
+                        </div>
+                        <div class="link-meta">
+                            <div class="link-title">${titleEsc}</div>
+                            <div class="link-url">${shortUrl}</div>
+                        </div>
+                        <div class="link-actions">
+                            <button class="btn btn-ghost open-btn" title="Open link" aria-label="Open link">
+                                <span class="material-icons">open_in_new</span>
+                            </button>
+                            <button class="btn copy-btn" title="Copy link" aria-label="Copy link">
+                                <span class="material-icons">content_copy</span>
+                            </button>
+                        </div>
+                    `;
+
+                    // card click opens (except clicks on buttons)
+                    card.addEventListener('click', (e) => {
+                        if (e.target.closest('button')) return;
+                        openExternal(l.url);
+                    });
+
+                    // open button
+                    card.querySelector('.open-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openExternal(l.url);
+                    });
+
+                    // copy button
+                    card.querySelector('.copy-btn').addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        try {
+                            await navigator.clipboard.writeText(l.url);
+                            showCopied(card.querySelector('.copy-btn'));
+                        } catch (err) {
+                            fallbackCopy(l.url);
+                            showCopied(card.querySelector('.copy-btn'));
+                        }
+                    });
+
+                    linksRoot.appendChild(card);
+                });
+
+                // set Open Site button to first link (if exists)
+                if (list[0]) {
+                    openAllButton.href = list[0].url;
+                    openAllButton.style.display = '';
+                } else {
+                    openAllButton.style.display = 'none';
+                }
+            }
+
+            // small helpers
+            function makeShort(u) {
+                try {
+                    const o = new URL(u);
+                    return o.hostname + (o.pathname === '/' ? '' : o.pathname);
+                } catch (e) {
+                    return u;
+                }
+            }
+
+            function escapeHtml(s) {
+                return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+            }
+
+            // small heuristic icon for thumb (uses material icons names)
+            function iconFor(u) {
+                if (!u) return 'link';
+                if (u.startsWith('mailto:')) return 'email';
+                try {
+                    const host = new URL(u).hostname;
+                    if (host.includes('facebook')) return 'thumb_up';
+                    if (host.includes('instagram')) return 'photo_camera';
+                    if (host.includes('twitter')) return 'share';
+                    if (host.includes('youtube')) return 'ondemand_video';
+                    return 'public';
+                } catch (e) {
+                    return 'link';
+                }
+            }
+
+            function showCopied(el) {
+                const msg = document.createElement('span');
+                msg.className = 'copied';
+                msg.textContent = 'Copied';
+                el.parentNode.appendChild(msg);
+                setTimeout(() => msg.remove(), 1400);
+            }
+
+            function fallbackCopy(text) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) { }
+                ta.remove();
+            }
+
+            function openExternal(url) {
+                // open using replace if mailto won't work with replace; for mailto use location.href
+                if (url && url.startsWith('mailto:')) {
+                    window.location.href = url;
+                } else {
+                    window.open(url, '_blank', 'noreferrer');
+                }
+            }
+
+            // QR generation: page QR (best to encode final target when you want immediate open)
+            qrBtn.addEventListener('click', async () => {
+                const targetUrl = window.location.href;
+                try {
+                    if (typeof QRCode === 'undefined') {
+                        await loadScript('https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js');
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 800;
+                    canvas.height = 800;
+                    await QRCode.toCanvas(canvas, targetUrl, { width: 800, margin: 2 });
+                    const a = document.createElement('a');
+                    a.href = canvas.toDataURL('image/png');
+                    a.download = 'glary-links-qr.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } catch (err) {
+                    const fallback = 'https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=' + encodeURIComponent(targetUrl);
+                    window.open(fallback, '_blank');
+                }
+            });
+
+            function loadScript(src) {
+                return new Promise((res, rej) => {
+                    const s = document.createElement('script');
+                    s.src = src;
+                    s.onload = res;
+                    s.onerror = rej;
+                    document.head.appendChild(s);
+                });
+            }
+
+            // READ README flow: try paths in order and use first that contains links
+            (async function loadAndRender() {
+                subtitleEl.textContent = 'Looking for README.md…';
+                let found = false;
+                for (const p of tryPaths) {
+                    const txt = await tryFetch(p);
+                    if (txt) {
+                        const parsed = parseLinksFromMarkdown(txt);
+                        if (parsed && parsed.length) {
+                            // map to LINK objects and render
+                            LINKS = parsed.map((it, idx) => ({
+                                name: it.name || (it.url.startsWith('mailto:') ? it.url.replace(/^mailto:/i, '') : (new URL(it.url).hostname)),
+                                url: it.url,
+                                cls: ['t-purple', 't-teal', 't-orange', 't-blue'][idx % 4]
+                            }));
+                            subtitleEl.textContent = 'Links loaded from README: ' + p;
+                            renderLinks(LINKS);
+                            found = true;
+                            break;
+                        } else {
+                            // README exists but no links parsed
+                            subtitleEl.textContent = 'README found but no links parsed: ' + p;
+                            // still render fallback
+                            renderLinks(LINKS);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    subtitleEl.textContent = 'Using embedded links (README not found)';
+                    renderLinks(LINKS);
+                }
+
+                // auto-open logic: if URL contains ?auto=1 or ?go=1 try to redirect to first link
+                const params = new URLSearchParams(location.search);
+                const AUTO = params.get('auto') === '1' || params.get('go') === '1' || params.get('direct') === '1';
+                if (AUTO && LINKS[0] && LINKS[0].url) {
+                    // show a small hint then open
+                    subtitleEl.textContent = 'Auto-opening ' + LINKS[0].name + ' …';
+                    setTimeout(() => {
+                        // use replace for smoother UX
+                        if (LINKS[0].url.startsWith('mailto:')) location.href = LINKS[0].url;
+                        else location.replace(LINKS[0].url);
+                    }, 120);
+                }
+            })();
+
+            // parseLinksFromMarkdown helper (duplicated here, same as above)
+            function parseLinksFromMarkdown(md) {
+                const found = [];
+                const mdRe = /\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/g;
+                let m;
+                while ((m = mdRe.exec(md)) !== null) {
+                    found.push({ name: m[1].trim(), url: m[2].trim() });
+                }
+                const urlRe = /(?:https?:\/\/|mailto:)[^\s)]+/g;
+                const existing = new Set(found.map(f => f.url));
+                while ((m = urlRe.exec(md)) !== null) {
+                    const u = m[0].trim();
+                    if (!existing.has(u)) {
+                        let name = u;
+                        try {
+                            if (u.startsWith('mailto:')) name = u.replace(/^mailto:/i, '');
+                            else name = new URL(u).hostname.replace(/^www\./i, '');
+                        } catch (e) { /* ignore */ }
+                        found.push({ name, url: u });
+                        existing.add(u);
+                    }
+                }
+                return found;
+            }
+
+            // tryFetch helper (duplicated for clarity)
+            async function tryFetch(path) {
+                try {
+                    const r = await fetch(path, { cache: "no-store" });
+                    if (!r.ok) throw new Error('not ok ' + r.status);
+                    const txt = await r.text();
+                    if (!txt || txt.trim().length === 0) throw new Error('empty');
+                    return txt;
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            // accessibility: keyboard open
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && document.activeElement && document.activeElement.classList.contains('link-card')) {
+                    const u = document.activeElement.getAttribute('data-url');
+                    if (u) openExternal(u);
+                }
+            });
+
+            // long-press copy for touch
+            let pressTimer;
+            document.addEventListener('touchstart', (e) => {
+                const t = e.target.closest('.link-card');
+                if (!t) return;
+                pressTimer = setTimeout(() => {
+                    const u = t.getAttribute('data-url');
+                    if (u) {
+                        try { navigator.clipboard.writeText(u); showCopied(t.querySelector('.copy-btn')); }
+                        catch (err) { fallbackCopy(u); showCopied(t.querySelector('.copy-btn')); }
+                    }
+                }, 900);
+            }, { passive: true });
+            document.addEventListener('touchend', () => clearTimeout(pressTimer), { passive: true });
+
+        })();
+    </script>
+</body>
+
+</html>
